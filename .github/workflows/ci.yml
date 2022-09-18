@@ -18,7 +18,8 @@ jobs:
         node-version: '16'
     - name: npm install
       run: |
-        cd /client
+        ls
+        cd ./recipestash/client
         npm install
         npm build
         cd ../
