@@ -14,7 +14,7 @@ def users():
 @cross_origin()
 def index():
     return {
-        "Testing api index"
+        "tutorial":"Flask react Heroku"
     }
 
 @app.route("/")
