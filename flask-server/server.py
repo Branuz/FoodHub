@@ -11,7 +11,7 @@ def users():
 
 #Index API Route
 @app.route("/api", methods=["GET"])
-@cross_origin
+@cross_origin()
 def index():
     return {
         "Testing api index"
