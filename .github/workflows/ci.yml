@@ -17,9 +17,9 @@ jobs:
       with:
         node-version: '16'
     - name: npm install
-      run: | 
-        npm install
+      run: |
         cd /client
+        npm install
         npm build
         cd ../
     - run: |
