@@ -6,12 +6,19 @@ from os import getenv
 from flask_marshmallow import Marshmallow
 
 app = Flask(__name__, static_folder="../client/build", static_url_path="")
-app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
+
+#Heroku uri replacement fix
+uri = getenv("DATABASE_URL") # or other relevant config var
+if uri and uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+
+
+app.config["SQLALCHEMY_DATABASE_URI"] = uri
 #app.config["SQLALCHEMY_DATABASE_URI"] = ("postgresql:///jpoussu")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
-db.create_all()
+
 CORS(app)
 
 class Recipes(db.Model):
