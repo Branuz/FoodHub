@@ -11,7 +11,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
-
+db.create_all()
 CORS(app)
 
 class Recipes(db.Model):
