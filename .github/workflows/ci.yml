@@ -34,6 +34,7 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Deploy to Heroku
       env:
+        HEROKU_PSQL_URI: ${{ secrets.HEROKU_PSQL_URI}}
         HEROKU_API_TOKEN: ${{ secrets.HEROKU_API_TOKEN }}
         HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
       if: github.ref == 'refs/heads/main' && job.status == 'success'
