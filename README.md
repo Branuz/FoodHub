@@ -9,6 +9,9 @@ Currently setting up the recipe modification functions and routes. Once the fron
   - Will be changing the designs to much more specific ones soon since right now only id, body, title and date are part of the schema. 
 To test this you can press the buttons "update, delete and add recipe"
 
+<h3>Currenly not working</h3>
+- Headers links dont lead to anywhere but / untill they have working routes.
+
 <h2>Purpose of the application</h2>
 The purpose of this application is to work as a easy to use recipe storing website where registered users can post/edit different food or drink recipes.
 

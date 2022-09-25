@@ -11,8 +11,8 @@ function Header() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ms-auto">
-                    <Nav.Link href="/recipes">Recipes</Nav.Link>
-                    <Nav.Link href="/login">
+                    <Nav.Link href="/">Recipes</Nav.Link>
+                    <Nav.Link href="/">
                         <i className='fas fa-user'></i>Sign In</Nav.Link>
                 </Nav>
                 </Navbar.Collapse>
