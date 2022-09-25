@@ -3,10 +3,6 @@ import {Navbar, Nav, Container} from "react-bootstrap"
 
 function Header() {
 
-const insertRecipe = () => {
-    console.log("WORKING?")
-}
-
   return (
     <header>
         <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
