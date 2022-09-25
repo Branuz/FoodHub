@@ -32,12 +32,6 @@ class RecipeSchema(ma.Schema):
 recipe_schema = RecipeSchema()
 recipes_schema = RecipeSchema(many=True)
 
-        
-#Users API Route
-@app.route("/users")
-def users():
-    return {"users": ["User1", "User2", "User3"]}
-
 #Create recipe Route
 @app.route("/add", methods=["POST"])
 def add_recipe():
@@ -63,12 +57,33 @@ def recipe_details(id):
     recipe = Recipes.query.get(id)
     return recipe_schema.jsonify(recipe)
 
+#Get recipe based on id
+@app.route("/update/<id>/", methods=["PUT"])
+def update_recipe(id):
+    recipe = Recipes.query.get(id)
+
+    title = request.json["title"]
+    body = request.json["body"]
+
+    recipe.title = title
+    recipe.body = body
+
+    db.session.commit()
+    return recipe_schema.jsonify(recipe)
+
+#Deletes article based on id
+@app.route("/delete/<id>/", methods=["DELETE"])
+def recipe_delete(id):
+    recipe = Recipes.query.get(id)
+    db.session.delete(recipe)
+    db.session.commit()
+
+    return recipe_schema.jsonify(recipe)
+
 #Index API Route
 @app.route("/api", methods=["GET"])
 @cross_origin()
 def index():
-    result = db.session.execute("SELECT * FROM users")
-    messages = result.fetchall()
     return {
         "tutorial":"Flask react Heroku"
     }
