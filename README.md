@@ -10,6 +10,7 @@ Currently setting up the recipe modification functions and routes. Once the fron
 To test this you can press the buttons "update, delete and add recipe"
 
 <h3>Currenly not working</h3>
+
 - Headers links dont lead to anywhere but / untill they have working routes.
 
 <h2>Purpose of the application</h2>
