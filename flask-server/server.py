@@ -2,11 +2,11 @@ from flask import Flask, jsonify, send_from_directory, request
 from flask_cors import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
 import datetime
-import os
+from os import getenv
 from flask_marshmallow import Marshmallow
 
 app = Flask(__name__, static_folder="../client/build", static_url_path="")
-app.config["SQLALCHEMY_DATABASE_URI"] = ("postgresql://",os.getenv("DATABASE_URL"))
+app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 #app.config["SQLALCHEMY_DATABASE_URI"] = ("postgresql:///jpoussu")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False 
 db = SQLAlchemy(app)
