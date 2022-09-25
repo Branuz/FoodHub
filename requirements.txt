@@ -10,3 +10,5 @@ six==1.16.0
 Werkzeug==2.2.2
 flask-marshmallow==0.14.0
 Flask-SQLAlchemy==2.5.1
+marshmallow==3.18.0
+marshmallow-sqlalchemy==0.28.1
