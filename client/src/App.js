@@ -39,13 +39,43 @@ function App() {
     setRecipes(new_recipe)
   }
 
+  const openForm = () => {
+    setEditedRecipe({title:"", body:""})
+  }
+
+  const insertedRecipe = (recipe) => {
+    const new_recipes = [...recipes, recipe]
+    setRecipes(new_recipes)
+  }
+
+  const deleteRecipe = (recipe) => {
+    const new_recipes = recipes.filter(myrecipe => {
+      if(myrecipe.id === recipe.id) {
+        return false;
+      }
+      return true
+    })
+
+    setRecipes(new_recipes)
+  }
+
   return (
     <div className="App">
-      <h1>Reseptit</h1>
+      <div className='row'>
+        <div className='col'>
+          <h1>Reseptit</h1>
+        </div>
+        <div className='col'>
+          <button
+          className = "btn btn-success"
+          onClick = {openForm}
+          >InsertRecipe</button>
+        </div>
+      </div>
 
-        <RecipeList recipes = {recipes} editRecipe = {editRecipe}/>
+        <RecipeList recipes = {recipes} editRecipe = {editRecipe} deleteRecipe = {deleteRecipe}/>
 
-        {editedRecipe ? <Form recipe = {editedRecipe} updatedRecipe = {updatedRecipe}/> : null}
+        {editedRecipe ? <Form recipe = {editedRecipe} updatedRecipe = {updatedRecipe} insertedRecipe = {insertedRecipe}/> : null}
         
     </div>
   );

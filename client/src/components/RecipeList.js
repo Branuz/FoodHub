@@ -1,9 +1,15 @@
 import React from 'react'
+import APIService from './APIService'
 
 function RecipeList(props) {
 
     const editRecipe = (recipe) => {
         props.editRecipe(recipe)
+    }
+
+    const deleteRecipe = (recipe) => {
+        APIService.DeleteRecipe(recipe.id)
+        .then(() => props.deleteRecipe(recipe))
     }
 
   return (
@@ -23,7 +29,9 @@ function RecipeList(props) {
                 </div>
 
                 <div className = 'col'>
-                    <button className = 'btn btn-danger'>Delete</button>
+                    <button className = 'btn btn-danger'
+                        onClick = {() => deleteRecipe(recipe)}
+                    >Delete</button>
                 </div>
 
             </div>

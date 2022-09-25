@@ -16,6 +16,12 @@ function Form(props) {
         .catch(error => console.log(error))
     }
 
+    const insertRecipe = () => {
+        APIService.InsertRecipe({title, body})
+        .then(response => props.insertedRecipe(response))
+        .catch(error => console.log(error))
+    }
+
   return (
     <div>
         {props.recipe  ? (
@@ -27,7 +33,7 @@ function Form(props) {
                 placeholder = 'Please Enter Title'
                 onChange={(e) => setTitle(e.target.value)}
                 />
-
+                
                 <label htmlFor = "body" className = 'form-label'>Description</label>
                 <textarea
                 rows = "5"
@@ -36,10 +42,20 @@ function Form(props) {
                 className = 'form-control'
                 placeholder='Please Enter Description'
                 />
-                <button
-                onClick={updateRecipe}
-                className='btn btn-success mt-3'
-                >Update</button>
+
+                {
+                    props.recipe.id ? <button
+                    onClick={updateRecipe}
+                    className='btn btn-success mt-3'
+                    >Update</button>
+                    :
+
+                    <button
+                    onClick={insertRecipe}
+                    className='btn btn-success mt-3'
+                    >Insert</button>
+                } 
+
             </div>
         ):null}
 
