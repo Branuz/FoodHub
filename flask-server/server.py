@@ -1,4 +1,3 @@
-from django.shortcuts import redirect
 from flask import Flask, jsonify, send_from_directory, request
 from flask_cors import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
