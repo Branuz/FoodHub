@@ -1,4 +1,14 @@
 <h1>Recipe stash</h1>
+https://recipe-stash-2022.herokuapp.com/
+<h2>Current state</h2>
+Building up main components of the website and still under "testing" phase while finding out how everything works.
+Currently setting up the recipe modification functions and routes. Once the frontend and routing is done ill begin to add users, access permits etc..
+<h3>Currently working</h3>
+
+- Can create, update and delete recipes.
+  - Will be changing the designs to much more specific ones soon since right now only id, body, title and date are part of the schema. 
+To test this you can press the buttons "update, delete and add recipe"
+
 <h2>Purpose of the application</h2>
 The purpose of this application is to work as a easy to use recipe storing website where registered users can post/edit different food or drink recipes.
 

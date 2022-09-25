@@ -1,7 +1,9 @@
-import {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import RecipeList from './components/RecipeList';
 import Form from './components/Form';
 import "./App.css";
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 function App() {
 
@@ -60,24 +62,30 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <div className='row'>
-        <div className='col'>
-          <h1>Reseptit</h1>
+    <>
+    <Header/>
+    <main>
+      <div className="App">
+        <div className='row'>
+          <div className='col'>
+            <h1>Recipes</h1>
+          </div>
+          <div className='col'>
+            <button
+            className = "btn btn-success"
+            onClick = {openForm}
+            >Add Recipe</button>
+          </div>
         </div>
-        <div className='col'>
-          <button
-          className = "btn btn-success"
-          onClick = {openForm}
-          >InsertRecipe</button>
-        </div>
-      </div>
-
+        
         <RecipeList recipes = {recipes} editRecipe = {editRecipe} deleteRecipe = {deleteRecipe}/>
 
         {editedRecipe ? <Form recipe = {editedRecipe} updatedRecipe = {updatedRecipe} insertedRecipe = {insertedRecipe}/> : null}
-        
-    </div>
+          
+      </div>
+    </main>
+    <Footer/>
+    </>
   );
 }
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import APIService from './APIService'
+import Card from 'react-bootstrap/Card';
 
 function RecipeList(props) {
 
@@ -12,34 +13,31 @@ function RecipeList(props) {
         .then(() => props.deleteRecipe(recipe))
     }
 
-  return (
-    <div>
-        {props.recipes && props.recipes.map(recipe => {
-    return (
-        <div key = {recipe.id}>
-            <h2>{recipe.title}</h2>
-            <p>{recipe.body}</p>
-            <p>{recipe.date}</p>
+    const renderRecipe = (recipe) => {
+        return (
+            <div className="recipe-card" key = {recipe.id} >
+                <Card style={{ width: '18rem' }} className="box">
+                    <Card.Img variant="top" src="https://picsum.photos/300/" />
+                    <Card.Body>
+                        <Card.Title>{recipe.title}</Card.Title>
+                        <Card.Text>
+                            {recipe.body}
+                        </Card.Text>
+                        
+                        <button className = 'btn btn-primary'
+                            onClick={() => editRecipe(recipe)}
+                        >Update</button>
 
-            <div className = 'row'>
-                <div className = 'col-md-1'>
-                    <button className = 'btn btn-primary'
-                    onClick={() => editRecipe(recipe)}
-                    >Update</button>
-                </div>
-
-                <div className = 'col'>
-                    <button className = 'btn btn-danger'
-                        onClick = {() => deleteRecipe(recipe)}
-                    >Delete</button>
-                </div>
-
+                        <button className = 'btn btn-danger'
+                            onClick = {() => deleteRecipe(recipe)}
+                        >Delete</button>
+                    </Card.Body>
+                </Card>
             </div>
-        </div>
-    )
-    })}
-    </div>
-  )
+        )
+    }
+
+    return <div class="row row-cols-1 row-cols-md-4">{props.recipes.map(renderRecipe)}</div>
 }
 
 export default RecipeList

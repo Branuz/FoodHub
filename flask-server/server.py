@@ -87,13 +87,6 @@ def recipe_delete(id):
 
     return recipe_schema.jsonify(recipe)
 
-#Index API Route
-@app.route("/api", methods=["GET"])
-@cross_origin()
-def index():
-    return {
-        "tutorial":"Flask react Heroku"
-    }
 
 @app.route("/")
 def serve():
