@@ -1,12 +1,19 @@
 import React, {useState, useEffect} from 'react'
-
+import APIService from './APIService'
 
 function Form(props) {
-    const [title, setTitle] = useState(props.recipe.title)
-    const [body, setBody] = useState(props.recipe.body)
+    const [title, setTitle] = useState('')
+    const [body, setBody] = useState('')
+
+    useEffect(() => {
+        setTitle(props.recipe.title)
+        setBody(props.recipe.body)
+    },[props.recipe])
 
     const updateRecipe = () => {
-        
+        APIService.UpdateRecipe(props.recipe.id, {title, body})
+        .then(response => props.updatedRecipe(response))
+        .catch(error => console.log(error))
     }
 
   return (
@@ -14,14 +21,14 @@ function Form(props) {
         {props.recipe  ? (
             <div className = "mb-3">
 
-                <label htmlForm = "title" className = 'form-label'>Title</label>
+                <label htmlFor = "title" className = 'form-label'>Title</label>
                 <input type = "text" className=''form='form-control'
                 value = {title}
                 placeholder = 'Please Enter Title'
                 onChange={(e) => setTitle(e.target.value)}
                 />
 
-                <label htmlForm = "body" className = 'form-label'>Description</label>
+                <label htmlFor = "body" className = 'form-label'>Description</label>
                 <textarea
                 rows = "5"
                 value = {body}

@@ -1,10 +1,12 @@
 export default class APIService {
     static UpdateRecipe(id, body) {
-        return fetch("/get", {
+        return fetch(`/update/${id}`, {
             "method" : "PUT",
             headers: {
-                "Content-Type":"applications/json"
-            }
+                "Content-Type":"application/json"
+            },
+            body: JSON.stringify(body)
         })
+        .then(response => response.json())
     }
 }
