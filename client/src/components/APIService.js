@@ -1,24 +1,24 @@
 export default class APIService {
-    static UpdateRecipe(id, body) {
-        return fetch(`/update/${id}`, {
-            "method" : "PUT",
+    static async UpdateRecipe(id, body) {
+        const response = await fetch(`/update/${id}`, {
+            "method": "PUT",
             headers: {
-                "Content-Type":"application/json"
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(body)
         })
-        .then(response => response.json())
+        return await response.json()
     }
 
-    static InsertRecipe(body) {
-        return fetch(`/add`, {
-            "method" : "POST",
+    static async InsertRecipe(body) {
+        const response = await fetch(`/add`, {
+            "method": "POST",
             headers: {
-                "Content-Type":"application/json"
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(body)
         })
-        .then(response => response.json())
+        return await response.json()
     }
 
     static DeleteRecipe(id) {
