@@ -4,11 +4,12 @@ import Form from './components/Form';
 import "./App.css";
 import Header from './components/Header';
 import Footer from './components/Footer';
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom"
 
 function App() {
 
   const [recipes, setRecipes] = useState([])
-  const [editedRecipe, setEditedRecipe] = useState(null)
+  const [editedRecipe, setEditedRecipe] = useState([])
 
   useEffect(() => {
     fetch("/get", {
@@ -64,26 +65,20 @@ function App() {
   return (
     <>
     <Header/>
-    <main>
-      <div className="App">
-        <div className='row'>
-          <div className='col'>
-            <h1>Recipes</h1>
-          </div>
-          <div className='col'>
-            <button
-            className = "btn btn-success"
-            onClick = {openForm}
-            >Add Recipe</button>
-          </div>
+    <Router>
+      <main>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<RecipeList recipes = {recipes} editRecipe = {editRecipe} deleteRecipe = {deleteRecipe}/>}>
+            </Route>
+            
+            <Route path="/recipes/create/"  element={editedRecipe ?  <Form recipe = {editedRecipe} updatedRecipe = {updatedRecipe} insertedRecipe = {insertedRecipe}/> : null}>
+            </Route>
+          </Routes>
+            
         </div>
-        
-        <RecipeList recipes = {recipes} editRecipe = {editRecipe} deleteRecipe = {deleteRecipe}/>
-
-        {editedRecipe ? <Form recipe = {editedRecipe} updatedRecipe = {updatedRecipe} insertedRecipe = {insertedRecipe}/> : null}
-          
-      </div>
-    </main>
+      </main>
+    </Router>
     <Footer/>
     </>
   );

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import APIService from './APIService'
+import { useNavigate } from "react-router-dom";
 
 function Form(props) {
     const [title, setTitle] = useState('')
@@ -13,18 +14,28 @@ function Form(props) {
     const updateRecipe = () => {
         APIService.UpdateRecipe(props.recipe.id, {title, body})
         .then(response => props.updatedRecipe(response))
-        .catch(error => console.log(error))
+        .catch(error => console.log(error));
+
+        routeChange();
+    }
+
+    let navigate = useNavigate(); 
+    const routeChange = () => { 
+        let path = `/`; 
+        navigate(path);
     }
 
     const insertRecipe = () => {
         APIService.InsertRecipe({title, body})
         .then(response => props.insertedRecipe(response))
-        .catch(error => console.log(error))
+        .catch(error => console.log(error));
+
+        routeChange();
     }
 
   return (
     <div>
-        {props.recipe  ? (
+        {(
             <div className = "mb-3">
 
                 <label htmlFor = "title" className = 'form-label'>Title</label>
@@ -57,7 +68,7 @@ function Form(props) {
                 } 
 
             </div>
-        ):null}
+        )}
 
     </div>
   )

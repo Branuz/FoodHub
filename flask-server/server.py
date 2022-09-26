@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, send_from_directory, request
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import datetime
 from os import getenv
@@ -86,7 +86,6 @@ def recipe_delete(id):
     db.session.commit()
 
     return recipe_schema.jsonify(recipe)
-
 
 @app.route("/")
 def serve():

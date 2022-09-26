@@ -1,11 +1,21 @@
 import React from 'react'
 import APIService from './APIService'
 import Card from 'react-bootstrap/Card';
+import { useNavigate } from "react-router-dom";
 
 function RecipeList(props) {
 
+    let navigate = useNavigate(); 
+    const routeChange = () => { 
+        let path = `/recipes/create`; 
+        navigate(path);
+    }
+
+    
+
     const editRecipe = (recipe) => {
         props.editRecipe(recipe)
+        routeChange();
     }
 
     const deleteRecipe = (recipe) => {
@@ -37,7 +47,11 @@ function RecipeList(props) {
         )
     }
 
-    return <div class="row row-cols-1 row-cols-md-4">{props.recipes.map(renderRecipe)}</div>
+    return (
+        <div>
+            <h1>Recipes</h1>
+            <div className="row row-cols-1 row-cols-md-4">{props.recipes.map(renderRecipe)}</div>
+        </div>)
 }
 
 export default RecipeList
