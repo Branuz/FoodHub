@@ -11,7 +11,7 @@ To test this you can press the buttons "update, delete and add recipe"
 
 <h3>Currenly not working</h3>
 
-- Headers links dont lead to anywhere but / untill they have working routes.
+- Headers Sign in link dont lead to anywhere but / untill i finish making account creation routing.
 
 <h2>Purpose of the application</h2>
 The purpose of this application is to work as a easy to use recipe storing website where registered users can post/edit different food or drink recipes.
