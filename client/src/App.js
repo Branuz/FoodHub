@@ -42,10 +42,6 @@ function App() {
     setRecipes(new_recipe)
   }
 
-  const openForm = () => {
-    setEditedRecipe({title:"", body:""})
-  }
-
   const insertedRecipe = (recipe) => {
     const new_recipes = [...recipes, recipe]
     setRecipes(new_recipes)
