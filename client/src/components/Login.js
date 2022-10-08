@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
+import APIService from "./APIService";
 import "../css/Login.css";
 
 export default function Login() {
@@ -11,6 +12,11 @@ export default function Login() {
   function validateForm() {
     return email.length > 0 && password.length > 0;
   }
+
+  const verifyAccount= () => {
+    APIService.VerifyAccount({email, password})
+    .catch(error => console.log(error));
+}
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -37,7 +43,7 @@ export default function Login() {
           />
         </Form.Group>
         <div className="d-grid gap-2 mt-4">
-            <Button variant="success" disabled={!validateForm()}>Login</Button>{' '}
+            <Button variant="success" disabled={!validateForm()} onClick={verifyAccount}>Login</Button>{' '}
             <div>
                 Not registered? <Link to="/create-account">Create Account</Link>
             </div>

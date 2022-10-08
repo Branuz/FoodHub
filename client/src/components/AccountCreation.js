@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import APIService from "./APIService";
 import "../css/Login.css";
 
 function AccountCreation() {
@@ -18,6 +19,11 @@ function AccountCreation() {
   function handleSubmit(event) {
     event.preventDefault();
   }
+
+  const createAccount= () => {
+    APIService.CreateAccount({username, email, password})
+    .catch(error => console.log(error));
+}
 
   return (
     <div className="Login">
@@ -55,7 +61,7 @@ function AccountCreation() {
         />
       </Form.Group>
       <div className="d-grid gap-2 mt-4">
-          <Button variant="success" disabled={!validateForm()}>Register</Button>{' '}
+          <Button variant="success" disabled={!validateForm()} onClick={createAccount}>Register</Button>{' '}
       </div>
     </Form>
   </div>

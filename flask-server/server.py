@@ -1,4 +1,5 @@
-from flask import Flask, jsonify, send_from_directory, request
+import json
+from flask import Flask, jsonify, send_from_directory, request, redirect
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import datetime
@@ -39,6 +40,35 @@ class RecipeSchema(ma.Schema):
 recipe_schema = RecipeSchema()
 recipes_schema = RecipeSchema(many=True)
 
+#Create new account Route
+@app.route("/create-account", methods=["POST"])
+def create_account():
+    username = request.json ["username"]
+    email = request.json ["email"]
+    password = request.json ["password"]
+    
+    sql = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)"
+
+    db.session.execute(sql, {"username":username, "email":email, "password":password})
+    db.session.commit()
+
+    return redirect("/")
+
+#Verify that the email/username and password are valid
+@app.route("/get/user", methods=["POST"])
+def verify_user():
+    email = request.json ["email"]
+    password = request.json ["password"]
+    
+    sql = "SELECT id From users WHERE email=(:email) AND password=(:password) OR username=(:email) AND password=(:password)"
+    result = db.session.execute(sql, {"email":email, "password":password})
+    user_id = result.fetchone()
+
+    if user_id == None:
+        return json.dumps({'success':False}), 403, {'ContentType':'application/json'} 
+
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json', "Header1":user_id[0]} 
+
 #Create recipe Route
 @app.route("/add", methods=["POST"])
 def add_recipe():
@@ -57,6 +87,7 @@ def get_recipe():
     all_recipes = Recipes.query.all()
     results = recipes_schema.dump(all_recipes)
     return jsonify(results)
+
 
 #Get recipe based on id
 @app.route("/get/<id>/", methods=["GET"])

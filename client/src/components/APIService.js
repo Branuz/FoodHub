@@ -29,4 +29,37 @@ export default class APIService {
             },
         })
     }
+
+    static async CreateAccount(body) {
+        fetch(`/create-account`, {
+            "method": "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body),
+        })
+        .then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            }
+        })
+    }
+
+    static async VerifyAccount(body) {
+        fetch("/get/user", {
+            "method": "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body),
+          })
+          .then(response => {
+            console.log(response)
+            if(response.status === 200) {
+              return response.json()
+            }
+          })
+    }
+
 }
+
