@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import RecipeList from './components/RecipeList';
 import Form from './components/Form';
-import "./App.css";
+import "./css/App.css";
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Login from './components/Login';
+import AccountCreation from './components/AccountCreation';
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom"
 
 function App() {
@@ -70,7 +72,12 @@ function App() {
             
             <Route path="/recipes/create/"  element={editedRecipe ?  <Form recipe = {editedRecipe} updatedRecipe = {updatedRecipe} insertedRecipe = {insertedRecipe}/> : null}>
             </Route>
+
+            <Route path="/login" element={<Login />} />
+
+            <Route path="/create-account" element={<AccountCreation />} />
           </Routes>
+          
             
         </div>
       </main>

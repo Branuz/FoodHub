@@ -34,6 +34,7 @@ function RecipeList(props) {
                             {recipe.body}
                         </Card.Text>
                         
+                        <div className="d-grid gap-2 mt-4">
                         <button className = 'btn btn-primary'
                             onClick={() => editRecipe(recipe)}
                         >Update</button>
@@ -41,6 +42,7 @@ function RecipeList(props) {
                         <button className = 'btn btn-danger'
                             onClick = {() => deleteRecipe(recipe)}
                         >Delete</button>
+                        </div>
                     </Card.Body>
                 </Card>
             </div>

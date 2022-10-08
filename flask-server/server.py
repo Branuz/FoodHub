@@ -13,8 +13,8 @@ if uri and uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://", 1)
 
 
-app.config["SQLALCHEMY_DATABASE_URI"] = uri
-#app.config["SQLALCHEMY_DATABASE_URI"] = ("postgresql:///jpoussu")
+#app.config["SQLALCHEMY_DATABASE_URI"] = uri
+app.config["SQLALCHEMY_DATABASE_URI"] = ("postgresql:///jpoussu")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
@@ -94,6 +94,10 @@ def serve():
 
 @app.route("/recipes/create/")
 def recipe_form():
+    return send_from_directory(app.static_folder, "index.html")
+
+@app.route("/login")
+def login_page():
     return send_from_directory(app.static_folder, "index.html")
 
 if __name__ == "__main__":

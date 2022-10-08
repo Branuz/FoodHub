@@ -12,8 +12,8 @@ function Header() {
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ms-auto">
                     <Nav.Link href="/recipes/create/">Create recipe</Nav.Link>
-                    <Nav.Link href="/">
-                        <i className='fas fa-user'></i>Sign In</Nav.Link>
+                    <Nav.Link href="/login">
+                        <i className='fas fa-user'></i>Sign in</Nav.Link>
                 </Nav>
                 </Navbar.Collapse>
             </Container>
