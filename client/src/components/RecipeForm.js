@@ -8,17 +8,22 @@ import Col from 'react-bootstrap/Col';
 
 function RecipeForm(props) {
     const [title, setTitle] = useState('')
+    //const [type, setType] = useState('')
+    const [cookingTime, setCookingTime] = useState('')
     const [body, setBody] = useState('')
     const [ingredientList, setIngredientList] = useState([{ ingredient: "", amount: ""}]);
 
 
     useEffect(() => {
+        //setType(props.recipe.type)
         setTitle(props.recipe.title)
         setBody(props.recipe.body)
+        setCookingTime(props.recipe.cooking_time)
+        console.log(props.recipe)
     },[props.recipe])
 
     const updateRecipe = () => {
-        APIService.UpdateRecipe(props.recipe.id, {title, body})
+        APIService.UpdateRecipe(props.recipe.id, {title, body, cookingTime})
         .then(response => props.updatedRecipe(response))
         .catch(error => console.log(error));
 
@@ -32,7 +37,7 @@ function RecipeForm(props) {
     }
 
     const insertRecipe = () => {
-        APIService.InsertRecipe({title, body})
+        APIService.InsertRecipe({title, body, cookingTime})
         .then(response => props.insertedRecipe(response))
         .catch(error => console.log(error));
 
@@ -88,7 +93,7 @@ function RecipeForm(props) {
 
                         <Form.Group as={Col}>
                         <Form.Label>Cooking time</Form.Label>
-                        <Form.Control placeholder="Enter estimated cooking time "/>
+                        <Form.Control value = {cookingTime}  onChange={(e) => setCookingTime(e.target.value)} placeholder="Enter estimated cooking time "/>
                         </Form.Group>
                     </Row>
 

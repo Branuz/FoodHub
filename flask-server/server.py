@@ -2,7 +2,7 @@ import json
 from flask import Flask, jsonify, send_from_directory, request, redirect
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-import datetime
+from datetime import datetime
 import secrets
 from os import getenv
 from flask_marshmallow import Marshmallow
@@ -15,8 +15,8 @@ if uri and uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://", 1)
 
 
-#app.config["SQLALCHEMY_DATABASE_URI"] = uri
-app.config["SQLALCHEMY_DATABASE_URI"] = ("postgresql:///jpoussu")
+app.config["SQLALCHEMY_DATABASE_URI"] = uri
+#app.config["SQLALCHEMY_DATABASE_URI"] = ("postgresql:///jpoussu")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
@@ -28,15 +28,17 @@ class Recipes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     body = db.Column(db.Text)
-    date = db.Column(db.DateTime, default = datetime.datetime.now)
+    cooking_time = db.Column(db.Text)
+    date = db.Column(db.DateTime, default = datetime.now)
 
-    def __init__(self, title, body):
+    def __init__(self, title, body, cooking_time):
         self.title = title
         self.body = body
+        self.cooking_time = cooking_time
 
 class RecipeSchema(ma.Schema):
     class Meta:
-        fields = ("id" , "title", "body", "date")
+        fields = ("id" , "title", "body", "cooking_time" "date")
 
 recipe_schema = RecipeSchema()
 recipes_schema = RecipeSchema(many=True)
@@ -68,7 +70,7 @@ def verify_user():
 
     if token == None:
         return json.dumps({'success':False}), 403, {'ContentType':'application/json'} 
-        
+
     return json.dumps({'success':True}), 200, {'ContentType':'application/json', "token":token[0]} 
 
 #Create recipe Route
@@ -76,8 +78,15 @@ def verify_user():
 def add_recipe():
     title = request.json ["title"]
     body = request.json ["body"]
+    cooking_time = request.json ["cookingTime"]
 
-    recipes = Recipes(title, body)
+   #Will remove comment after done changing from OMR.
+   # date = datetime.now()
+   # sql = "INSERT INTO recipes (title, body, cooking_time, date) VALUES (:title, :body, :cooking_time, :date)"
+    #data = {"title":title, "body":body, "cooking_time" : cooking_time, "date" : date}
+    #db.session.execute(sql, data)
+
+    recipes = Recipes(title, body, cooking_time)
     db.session.add(recipes)
     db.session.commit()
 
@@ -104,9 +113,11 @@ def update_recipe(id):
 
     title = request.json["title"]
     body = request.json["body"]
+    cooking_time = request.json["cookingTime"]
 
     recipe.title = title
     recipe.body = body
+    recipe.cooking_time = cooking_time
 
     db.session.commit()
     return recipe_schema.jsonify(recipe)

@@ -8,6 +8,7 @@ import "../css/Login.css";
 export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [notification, setNotification] = useState("");
 
   let navigate = useNavigate(); 
   const routeChange = () => { 
@@ -22,14 +23,15 @@ export default function Login(props) {
   const verifyAccount= () => {
     APIService.VerifyAccount({email, password})
     .then(response => {
-        if(response.status === 200) {
+        if (response.status === 200) {
            var token = response.headers.get("token")
            localStorage.setItem("token", token) 
+           props.setLoginStatus("Logout")
+           routeChange()
+        } else {
+          setNotification("Incorrect username or password!")
         }
     })
-    
-    props.setLoginStatus("Logout")
-    routeChange()
 }
 
   function handleSubmit(event) {
@@ -39,6 +41,7 @@ export default function Login(props) {
   return (
     <div className="Login">
       <Form onSubmit={handleSubmit}>
+        <p style={{color: "red"}} >{notification}</p>
         <Form.Group size="lg" controlId="email">
           <Form.Label>Email</Form.Label>
           <Form.Control
