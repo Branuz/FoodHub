@@ -3,6 +3,7 @@ from flask import Flask, jsonify, send_from_directory, request, redirect
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import datetime
+import secrets
 from os import getenv
 from flask_marshmallow import Marshmallow
 
@@ -46,10 +47,11 @@ def create_account():
     username = request.json ["username"]
     email = request.json ["email"]
     password = request.json ["password"]
+    token = secrets.token_hex()
     
-    sql = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)"
+    sql = "INSERT INTO users (username, email, password, userhash) VALUES (:username, :email, :password, :token)"
 
-    db.session.execute(sql, {"username":username, "email":email, "password":password})
+    db.session.execute(sql, {"username":username, "email":email, "password":password, "token" : token})
     db.session.commit()
 
     return redirect("/")
@@ -60,14 +62,14 @@ def verify_user():
     email = request.json ["email"]
     password = request.json ["password"]
     
-    sql = "SELECT id From users WHERE email=(:email) AND password=(:password) OR username=(:email) AND password=(:password)"
+    sql = "SELECT token From users WHERE email=(:email) AND password=(:password) OR username=(:email) AND password=(:password)"
     result = db.session.execute(sql, {"email":email, "password":password})
-    user_id = result.fetchone()
+    token = result.fetchone()
 
-    if user_id == None:
+    if token == None:
         return json.dumps({'success':False}), 403, {'ContentType':'application/json'} 
 
-    return json.dumps({'success':True}), 200, {'ContentType':'application/json', "UserKey":user_id[0]} 
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json', "token":token[0]} 
 
 #Create recipe Route
 @app.route("/add", methods=["POST"])
