@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import RecipeList from './components/RecipeList';
-import Form from './components/Form';
+import Form from './components/RecipeForm';
 import "./css/App.css";
 import Header from './components/Header';
 import Footer from './components/Footer';
