@@ -5,13 +5,18 @@ Building up main components of the website and still under "testing" phase while
 Currently setting up the recipe modification functions and routes. Once the frontend and routing is done ill begin to add users, access permits etc..
 <h3>Currently working</h3>
 
-- Can create, update and delete recipes.
-  - Will be changing the designs to much more specific ones soon since right now only id, body, title and date are part of the schema. 
-To test this you can press the buttons "update, delete and add recipe"
+- :heavy_check_mark:Can create, update and delete recipes.
+- :heavy_check_mark: Can create new account
+- :heavy_check_mark: Can sign in and logout
+- :heavy_check_mark: Warning is given if the username or password does not match
+- :heavy_check_mark: After login users token is saved in local storage untill logout
 
 <h3>Currenly not working</h3>
 
-- Headers Sign in link dont lead to anywhere but / untill i finish making account creation routing.
+- In the new recipe form for now only the "Title and Instructions" are fetched from the db and shown in the update screen. Rest of the forms information will be fixed to be fetched in nearby days.
+- New ingredients can be added but they are not yet saved in storage.
+- New db calls are done via sql commands but have not yet removed the old ORM technique.
+- User specific editing and deleting to be added. Now everyone can delete and update recipes.
 
 <h2>Purpose of the application</h2>
 The purpose of this application is to work as a easy to use recipe storing website where registered users can post/edit different food or drink recipes.
