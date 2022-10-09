@@ -1,7 +1,13 @@
 import React from 'react'
 import {Navbar, Nav, Container} from "react-bootstrap"
 
-function Header() {
+function Header(props) {
+
+    function clearStorage() {
+        if(props.loginStatus === "Logout") {
+            localStorage.removeItem("token")
+        }
+    }
 
   return (
     <header>
@@ -12,8 +18,7 @@ function Header() {
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ms-auto">
                     <Nav.Link href="/recipes/create/">Create recipe</Nav.Link>
-                    <Nav.Link href="/login">
-                        <i className='fas fa-user'></i>Sign in</Nav.Link>
+                    <Nav.Link href="/login" onClick={clearStorage}><i className='fas fa-user'></i>{props.loginStatus}</Nav.Link>
                 </Nav>
                 </Navbar.Collapse>
             </Container>

@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import APIService from "./APIService";
 import "../css/Login.css";
 
-export default function Login() {
+export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  let navigate = useNavigate(); 
+  const routeChange = () => { 
+      let path = `/`; 
+      navigate(path);
+  }
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
@@ -15,7 +21,15 @@ export default function Login() {
 
   const verifyAccount= () => {
     APIService.VerifyAccount({email, password})
-    .catch(error => console.log(error));
+    .then(response => {
+        if(response.status === 200) {
+           var userkey = parseFloat(response.headers.get("UserKey"))
+           localStorage.setItem("token", userkey) 
+        }
+    })
+    
+    props.setLoginStatus("Logout")
+    routeChange()
 }
 
   function handleSubmit(event) {

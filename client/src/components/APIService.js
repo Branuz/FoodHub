@@ -46,19 +46,14 @@ export default class APIService {
     }
 
     static async VerifyAccount(body) {
-        fetch("/get/user", {
+       const response = await fetch("/get/user", {
             "method": "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(body),
           })
-          .then(response => {
-            console.log(response)
-            if(response.status === 200) {
-              return response.json()
-            }
-          })
+          return await response
     }
 
 }

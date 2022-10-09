@@ -67,7 +67,7 @@ def verify_user():
     if user_id == None:
         return json.dumps({'success':False}), 403, {'ContentType':'application/json'} 
 
-    return json.dumps({'success':True}), 200, {'ContentType':'application/json', "Header1":user_id[0]} 
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json', "UserKey":user_id[0]} 
 
 #Create recipe Route
 @app.route("/add", methods=["POST"])

@@ -13,7 +13,8 @@ function AccountCreation() {
   
 
   function validateForm() {
-    return email.length > 0 && password.length > 0;
+
+    return email.length > 0 && password.length > 0 && password === passwordRe;
   }
 
   function handleSubmit(event) {

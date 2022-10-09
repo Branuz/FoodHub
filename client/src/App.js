@@ -12,6 +12,9 @@ function App() {
 
   const [recipes, setRecipes] = useState([])
   const [editedRecipe, setEditedRecipe] = useState([])
+  const [loginStatus, setLoginStatus] = useState(localStorage.getItem("token") ? "Logout" : "Sign in")
+
+
 
   useEffect(() => {
     fetch("/get", {
@@ -62,7 +65,7 @@ function App() {
 
   return (
     <>
-    <Header/>
+    <Header loginStatus={loginStatus}/>
     <Router>
       <main>
         <div className="App">
@@ -73,7 +76,7 @@ function App() {
             <Route path="/recipes/create/"  element={editedRecipe ?  <Form recipe = {editedRecipe} updatedRecipe = {updatedRecipe} insertedRecipe = {insertedRecipe}/> : null}>
             </Route>
 
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login setLoginStatus={setLoginStatus}/>} />
 
             <Route path="/create-account" element={<AccountCreation />} />
           </Routes>
