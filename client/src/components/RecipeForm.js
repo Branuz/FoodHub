@@ -9,6 +9,8 @@ import Col from 'react-bootstrap/Col';
 function RecipeForm(props) {
     const [title, setTitle] = useState('')
     const [body, setBody] = useState('')
+    const [ingredientList, setIngredientList] = useState([{ ingredient: "", amount: ""}]);
+
 
     useEffect(() => {
         setTitle(props.recipe.title)
@@ -37,6 +39,24 @@ function RecipeForm(props) {
         routeChange();
     }
 
+    const handleIngredientChange = (e, index) => {
+        const { name, value } = e.target;
+        const list = [...ingredientList];
+        list[index][name] = value;
+        setIngredientList(list);
+      };
+
+      const handleIngredientRemove = (index) => {
+        const list = [...ingredientList];
+        list.splice(index, 1);
+        setIngredientList(list);
+      };
+
+      const handleIngredientAdd = () => {
+        setIngredientList([...ingredientList, { ingredient: "" }]);
+      };
+
+
   return (
     <div>
         {(
@@ -49,7 +69,7 @@ function RecipeForm(props) {
                     </Form.Group>
 
                     <Row className="mb-3">
-                        <Form.Group as={Col} controlId="formGridCity">
+                        <Form.Group as={Col} >
                         <Form.Label >Description</Form.Label>
                         <Form.Control placeholder="Short Description"/>
                         </Form.Group>
@@ -66,18 +86,49 @@ function RecipeForm(props) {
                         </Form.Select>
                         </Form.Group>
 
-                        <Form.Group as={Col} controlId="formGridZip">
+                        <Form.Group as={Col}>
                         <Form.Label>Cooking time</Form.Label>
                         <Form.Control placeholder="Enter estimated cooking time "/>
                         </Form.Group>
                     </Row>
 
+                    <div className="form-field">
+                    <label htmlFor="ingredient">Ingredient(s)</label>
+                    {ingredientList.map((singleService, index) => (
+                    <div key={index} className="ingredients">
+                        <div className="first-division">
+                        <Row className="mb-3">
+                            <Form.Group as={Col} controlId="formGridZip">
+                                <div className="input-group mb-3">
+                                    <input
+                                    placeholder="Place ingredient name"
+                                    className="form-control"
+                                    name="ingredient"
+                                    type="text"
+                                    id="ingredient"
+                                    value={singleService.ingredient}
+                                    onChange={(e) => handleIngredientChange(e, index)}
+                                    required
+                                />
+                                        <button className="btn btn-danger" onClick={() => handleIngredientRemove(index)} type="button" id="button-addon2">Remove</button>
+                                </div>
+                            </Form.Group>
+                        </Row>
+                        </div>
+                    </div>
+                    ))}
+            </div>
+                    <Row className="mb-3">
+                        <Form.Group as={Col}>
+                            <button className="btn btn-success" type="button" id="button-addon2" onClick={handleIngredientAdd} >New ingreadent</button>
+                        </Form.Group>
+                    </Row>
+                    
                     <Form.Group className="mb-3">
                         <Form.Label>Instructions</Form.Label>
                         <Form.Control value = {body} onChange={(e) => setBody(e.target.value)} placeholder="Enter Instructions" as="textarea" rows={5} />
                     </Form.Group>
                 </Form>
-
                 </div>
 
                 {
@@ -90,7 +141,7 @@ function RecipeForm(props) {
                     <button
                     onClick={insertRecipe}
                     className='btn btn-success mt-3'
-                    >Insert</button>
+                    >Create</button>
                 } 
 
             </div>
