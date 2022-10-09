@@ -23,8 +23,8 @@ export default function Login(props) {
     APIService.VerifyAccount({email, password})
     .then(response => {
         if(response.status === 200) {
-           var userkey = parseFloat(response.headers.get("UserKey"))
-           localStorage.setItem("token", userkey) 
+           var token = response.headers.get("token")
+           localStorage.setItem("token", token) 
         }
     })
     

@@ -49,7 +49,7 @@ def create_account():
     password = request.json ["password"]
     token = secrets.token_hex()
     
-    sql = "INSERT INTO users (username, email, password, userhash) VALUES (:username, :email, :password, :token)"
+    sql = "INSERT INTO users (username, email, password, token) VALUES (:username, :email, :password, :token)"
 
     db.session.execute(sql, {"username":username, "email":email, "password":password, "token" : token})
     db.session.commit()
@@ -68,7 +68,7 @@ def verify_user():
 
     if token == None:
         return json.dumps({'success':False}), 403, {'ContentType':'application/json'} 
-
+        
     return json.dumps({'success':True}), 200, {'ContentType':'application/json', "token":token[0]} 
 
 #Create recipe Route
