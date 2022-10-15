@@ -11,7 +11,7 @@ function RecipeForm(props) {
     //const [type, setType] = useState('')
     const [cookingTime, setCookingTime] = useState('')
     const [body, setBody] = useState('')
-    const [ingredientList, setIngredientList] = useState([{ ingredient: "", amount: ""}]);
+    const [ingredientList, setIngredientList] = useState([{ ingredient: "", amount: "", measurement: ""}]);
 
 
     useEffect(() => {
@@ -19,7 +19,6 @@ function RecipeForm(props) {
         setTitle(props.recipe.title)
         setBody(props.recipe.body)
         setCookingTime(props.recipe.cooking_time)
-        console.log(props.recipe)
     },[props.recipe])
 
     const updateRecipe = () => {
@@ -58,7 +57,7 @@ function RecipeForm(props) {
       };
 
       const handleIngredientAdd = () => {
-        setIngredientList([...ingredientList, { ingredient: "" }]);
+        setIngredientList([...ingredientList, { ingredient: "", amount: "", measurement: "" }]);
       };
 
 
@@ -100,6 +99,7 @@ function RecipeForm(props) {
                     <div className="form-field">
                     <label htmlFor="ingredient">Ingredient(s)</label>
                     {ingredientList.map((singleService, index) => (
+                        
                     <div key={index} className="ingredients">
                         <div className="first-division">
                         <Row className="mb-3">
@@ -112,6 +112,34 @@ function RecipeForm(props) {
                                     type="text"
                                     id="ingredient"
                                     value={singleService.ingredient}
+                                    onChange={(e) => handleIngredientChange(e, index)}
+                                    required
+                                />
+                                </div>
+                            </Form.Group>
+                            <Form.Group as={Col} controlId="formGridZip">
+                                <div className="input-group mb-3">
+                                    <input
+                                    placeholder="Place ingredient amount"
+                                    className="form-control"
+                                    name="amount"
+                                    type="text"
+                                    id="amount"
+                                    value={singleService.amount}
+                                    onChange={(e) => handleIngredientChange(e, index)}
+                                    required
+                                />
+                                </div>
+                            </Form.Group>
+                            <Form.Group as={Col} controlId="formGridZip">
+                                <div className="input-group mb-3">
+                                    <input
+                                    placeholder="Measuring type ml, l, tbs etc..."
+                                    className="form-control"
+                                    name="measurement"
+                                    type="text"
+                                    id="measurement"
+                                    value={singleService.measurement}
                                     onChange={(e) => handleIngredientChange(e, index)}
                                     required
                                 />
