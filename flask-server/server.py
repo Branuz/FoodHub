@@ -1,11 +1,10 @@
 import json
-from flask import Flask, jsonify, send_from_directory, request, redirect
+from flask import Flask, send_from_directory, request, redirect
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import secrets
 from os import getenv
-from flask_marshmallow import Marshmallow
 
 app = Flask(__name__, static_folder="../client/build", static_url_path="")
 
@@ -19,29 +18,8 @@ if uri and uri.startswith("postgres://"):
 app.config["SQLALCHEMY_DATABASE_URI"] = ("postgresql:///jpoussu")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False 
 db = SQLAlchemy(app)
-ma = Marshmallow(app)
 
 CORS(app)
-
-class Recipes(db.Model):
-
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100))
-    body = db.Column(db.Text)
-    cooking_time = db.Column(db.Text)
-    date = db.Column(db.DateTime, default = datetime.now)
-
-    def __init__(self, title, body, cooking_time):
-        self.title = title
-        self.body = body
-        self.cooking_time = cooking_time
-
-class RecipeSchema(ma.Schema):
-    class Meta:
-        fields = ("id" , "title", "body", "cooking_time" "date")
-
-recipe_schema = RecipeSchema()
-recipes_schema = RecipeSchema(many=True)
 
 #Create new account Route
 @app.route("/create-account", methods=["POST"])
@@ -51,7 +29,7 @@ def create_account():
     password = request.json ["password"]
     token = secrets.token_hex()
     
-    sql = "INSERT INTO users (username, email, password, token) VALUES (:username, :email, :password, :token)"
+    sql = "INSERT INTO users (username, email, password, token) VALUES (:username, :email, :password, :token);"
 
     db.session.execute(sql, {"username":username, "email":email, "password":password, "token" : token})
     db.session.commit()
@@ -64,7 +42,7 @@ def verify_user():
     email = request.json ["email"]
     password = request.json ["password"]
     
-    sql = "SELECT token From users WHERE email=(:email) AND password=(:password) OR username=(:email) AND password=(:password)"
+    sql = "SELECT token From users WHERE email=(:email) AND password=(:password) OR username=(:email) AND password=(:password);"
     result = db.session.execute(sql, {"email":email, "password":password})
     token = result.fetchone()
 
@@ -77,59 +55,74 @@ def verify_user():
 @app.route("/add", methods=["POST"])
 def add_recipe():
     title = request.json ["title"]
-    body = request.json ["body"]
+    description = request.json ["description"]
+    type = request.json ["type"]
     cooking_time = request.json ["cookingTime"]
+    instructions = request.json ["instructions"]
+    ingredients = request.json["ingredientList"]
+    date = datetime.now()
 
-   #Will remove comment after done changing from OMR.
-   # date = datetime.now()
-   # sql = "INSERT INTO recipes (title, body, cooking_time, date) VALUES (:title, :body, :cooking_time, :date)"
-    #data = {"title":title, "body":body, "cooking_time" : cooking_time, "date" : date}
-    #db.session.execute(sql, data)
+    sql = "INSERT INTO recipes (title, description, type, cooking_time, instructions, date) VALUES (:title, :description, :type, :cooking_time, :instructions, :date);"
+    data = {"title":title, "description":description, "type" : type, "cooking_time" : cooking_time, "instructions" : instructions, "date" : date}
+    db.session.execute(sql, data)
+    
+    for item in ingredients:
+        ingredient = item["ingredient"]
+        amount = item["amount"]
+        measurement_type = item["measurement"]
+        
+        sql = "INSERT INTO ingredients (name, amount, measurement_type, recipe_name) VALUES (:ingredient, :amount, :measurement_type);"
+        data = {"ingredient":ingredient, "amount":amount, "measurement_type":measurement_type}
+        db.session.execute(sql, data)
 
-    recipes = Recipes(title, body, cooking_time)
-    db.session.add(recipes)
     db.session.commit()
 
-    return recipe_schema.jsonify(recipes)
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
 #Get all recipes
 @app.route("/get", methods=["GET"])
 def get_recipe():
-    all_recipes = Recipes.query.all()
-    results = recipes_schema.dump(all_recipes)
-    return jsonify(results)
+    data = []
+    sql = "SELECT * FROM recipes;"
+    results = db.session.execute(sql).fetchall()
+    
+    for row in results:
+        data.append(list(row))
+
+    return json.dumps(data, indent=4, sort_keys=True, default=str)
 
 
 #Get recipe based on id
 @app.route("/get/<id>/", methods=["GET"])
 def recipe_details(id):
-    recipe = Recipes.query.get(id)
-    return recipe_schema.jsonify(recipe)
+    return ""
 
 #Get recipe based on id
 @app.route("/update/<id>/", methods=["PUT"])
 def update_recipe(id):
-    recipe = Recipes.query.get(id)
+    title = request.json ["title"]
+    description = request.json ["description"]
+    type = request.json ["type"]
+    cooking_time = request.json ["cookingTime"]
+    instructions = request.json ["instructions"]
+    date = datetime.now()
 
-    title = request.json["title"]
-    body = request.json["body"]
-    cooking_time = request.json["cookingTime"]
-
-    recipe.title = title
-    recipe.body = body
-    recipe.cooking_time = cooking_time
-
+   #Will remove comment after done changing from OMR.
+    sql = "UPDATE recipes SET title=:title, description=:description, type=:type, cooking_time=:cooking_time, instructions=:instructions, date=:date WHERE id=:id;"
+    data = {"title":title, "description":description, "type" : type, "cooking_time" : cooking_time, "instructions" : instructions, "date" : date, "id" : id}
+    db.session.execute(sql, data)
     db.session.commit()
-    return recipe_schema.jsonify(recipe)
+
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
 
 #Deletes article based on id
 @app.route("/delete/<id>/", methods=["DELETE"])
 def recipe_delete(id):
-    recipe = Recipes.query.get(id)
-    db.session.delete(recipe)
+    sql = "DELETE FROM recipes WHERE id = :id;"
+    db.session.execute(sql, {"id":id})
     db.session.commit()
 
-    return recipe_schema.jsonify(recipe)
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
 @app.route("/")
 def serve():

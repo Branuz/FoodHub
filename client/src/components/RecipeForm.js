@@ -7,23 +7,26 @@ import Col from 'react-bootstrap/Col';
 
 
 function RecipeForm(props) {
-    const [title, setTitle] = useState('')
-    //const [type, setType] = useState('')
-    const [cookingTime, setCookingTime] = useState('')
-    const [body, setBody] = useState('')
+    const [title, setTitle] = useState(null)
+    const [type, setType] = useState(null)
+    const [description, setDescription] = useState(null)
+    const [cookingTime, setCookingTime] = useState(null)
+    const [instructions, setInstructions] = useState(null)
+    const [error, setError] = useState('')
     const [ingredientList, setIngredientList] = useState([{ ingredient: "", amount: "", measurement: ""}]);
 
 
     useEffect(() => {
-        //setType(props.recipe.type)
-        setTitle(props.recipe.title)
-        setBody(props.recipe.body)
-        setCookingTime(props.recipe.cooking_time)
+        setTitle(props.recipe[1])
+        setDescription(props.recipe[2])
+        props.recipe[3] ? setType(props.recipe[3]) : setType("Breakfest")
+        setCookingTime(props.recipe[4])
+        setInstructions(props.recipe[5])
     },[props.recipe])
 
     const updateRecipe = () => {
-        APIService.UpdateRecipe(props.recipe.id, {title, body, cookingTime})
-        .then(response => props.updatedRecipe(response))
+        APIService.UpdateRecipe(props.recipe[0], {title, description, type, cookingTime, instructions })
+        .then(response => props.insertedRecipe(response))
         .catch(error => console.log(error));
 
         routeChange();
@@ -36,11 +39,14 @@ function RecipeForm(props) {
     }
 
     const insertRecipe = () => {
-        APIService.InsertRecipe({title, body, cookingTime})
-        .then(response => props.insertedRecipe(response))
-        .catch(error => console.log(error));
-
-        routeChange();
+        if (title==null || description==null || type==null | cookingTime==null | instructions==null ) {
+            setError("You need to fill all the fields!")
+        } else {
+            APIService.InsertRecipe({title, description, type, cookingTime, instructions, ingredientList })
+            .then(response => props.insertedRecipe(response))
+    
+            routeChange();
+        }
     }
 
     const handleIngredientChange = (e, index) => {
@@ -65,6 +71,7 @@ function RecipeForm(props) {
     <div>
         {(
             <div className = "mb-3">
+                <h3 style={{color: "red"}}>{error}</h3>
                 <div>
                 <Form>
                     <Form.Group className="mb-3">
@@ -75,12 +82,12 @@ function RecipeForm(props) {
                     <Row className="mb-3">
                         <Form.Group as={Col} >
                         <Form.Label >Description</Form.Label>
-                        <Form.Control placeholder="Short Description"/>
+                        <Form.Control placeholder="Short Description" value = {description}  onChange={(e) => setDescription(e.target.value)}/>
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridState">
                         <Form.Label>Type</Form.Label>
-                        <Form.Select defaultValue="Choose...">
+                        <Form.Select value = {type} onChange={(e) => setType(e.target.value)} >
                             <option>Breakfest</option>
                             <option>Lunch</option>
                             <option>Dinner</option>
@@ -101,7 +108,7 @@ function RecipeForm(props) {
                     {ingredientList.map((singleService, index) => (
                         
                     <div key={index} className="ingredients">
-                        <div className="first-division">
+                        <div className="first-division" style={{borderBottom: "1px solid gray", marginBottom:"20px"}}>
                         <Row className="mb-3">
                             <Form.Group as={Col} controlId="formGridZip">
                                 <div className="input-group mb-3">
@@ -159,13 +166,13 @@ function RecipeForm(props) {
                     
                     <Form.Group className="mb-3">
                         <Form.Label>Instructions</Form.Label>
-                        <Form.Control value = {body} onChange={(e) => setBody(e.target.value)} placeholder="Enter Instructions" as="textarea" rows={5} />
+                        <Form.Control value = {instructions} onChange={(e) => setInstructions(e.target.value)} placeholder="Enter Instructions" as="textarea" rows={5} />
                     </Form.Group>
                 </Form>
                 </div>
 
                 {
-                    props.recipe.id ? <button
+                    props.recipe[0]? <button
                     onClick={updateRecipe}
                     className='btn btn-success mt-3'
                     >Update</button>

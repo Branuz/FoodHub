@@ -19,5 +19,8 @@ CREATE TABLE recipes (
 CREATE TABLE ingredients (
     id SERIAL PRIMARY KEY,
     name TEXT,
-    recipe_id INTEGER REFERENCES recipes
+    amount FLOAT,
+    measurement_type TEXT,
+    title TEXT REFERENCES recipes
 );
+

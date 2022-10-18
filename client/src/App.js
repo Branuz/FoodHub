@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 import AccountCreation from './components/AccountCreation';
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom"
+import APIService from './components/APIService';
 
 function App() {
 
@@ -17,44 +18,27 @@ function App() {
 
 
   useEffect(() => {
-    fetch("/get", {
-      "method":"GET",
-      headers: {
-        "Content-Type":"application/json"
-      }
-    })
-    .then(response => {
-      if(response.status === 200) {
-        return response.json()
-      }
-    })
-    .then(response => setRecipes(response))
-    .catch(error => console.log(error))
+   APIService.getAllRecipes()
+   .then(response => {
+      setRecipes(response)
+   })
+
   }, [])
 
   const editRecipe = (recipe) => {
     setEditedRecipe(recipe)
   }
 
-  const updatedRecipe = (recipe) => {
-    const new_recipe = recipes.map(my_recipe => {
-      if(my_recipe.id === recipe.id) {
-        return recipe
-      } else {
-        return my_recipe
-      }
+  const insertedRecipe = (response) => {
+    APIService.getAllRecipes()
+    .then(response => {
+       setRecipes(response)
     })
-    setRecipes(new_recipe)
-  }
-
-  const insertedRecipe = (recipe) => {
-    const new_recipes = [...recipes, recipe]
-    setRecipes(new_recipes)
   }
 
   const deleteRecipe = (recipe) => {
     const new_recipes = recipes.filter(myrecipe => {
-      if(myrecipe.id === recipe.id) {
+      if(myrecipe[0] === recipe[0]) {
         return false;
       }
       return true
@@ -73,7 +57,7 @@ function App() {
             <Route path="/" element={<RecipeList recipes = {recipes} editRecipe = {editRecipe} deleteRecipe = {deleteRecipe}/>}>
             </Route>
             
-            <Route path="/recipes/create/"  element={editedRecipe ?  <Form recipe = {editedRecipe} updatedRecipe = {updatedRecipe} insertedRecipe = {insertedRecipe}/> : null}>
+            <Route path="/recipes/create/"  element={editedRecipe ?  <Form recipe = {editedRecipe} insertedRecipe = {insertedRecipe}/> : null}>
             </Route>
 
             <Route path="/login" element={<Login setLoginStatus={setLoginStatus}/>} />

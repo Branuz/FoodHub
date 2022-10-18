@@ -19,7 +19,7 @@ function RecipeList(props) {
     }
 
     const deleteRecipe = (recipe) => {
-        APIService.DeleteRecipe(recipe.id)
+        APIService.DeleteRecipe(recipe[0])
         .then(() => props.deleteRecipe(recipe))
     }
 
@@ -29,9 +29,9 @@ function RecipeList(props) {
                 <Card style={{ width: '18rem' }} className="box">
                     <Card.Img variant="top" src="https://picsum.photos/300/" />
                     <Card.Body>
-                        <Card.Title>{recipe.title}</Card.Title>
+                        <Card.Title>{recipe[1]}</Card.Title>
                         <Card.Text>
-                            {recipe.body}
+                            {recipe[2]}
                         </Card.Text>
                         
                         <div className="d-grid gap-2 mt-4">
