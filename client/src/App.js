@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import RecipeList from './components/RecipeList';
 import Form from './components/RecipeForm';
+import RecipeView from './components/RecipeView';
 import "./css/App.css";
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -58,6 +59,9 @@ function App() {
             </Route>
             
             <Route path="/recipes/create/"  element={editedRecipe ?  <Form recipe = {editedRecipe} insertedRecipe = {insertedRecipe}/> : null}>
+            </Route>
+
+            <Route path="/recipes/view/"  element={editedRecipe ?  <RecipeView recipe = {editedRecipe} insertedRecipe = {insertedRecipe}/> : null}>
             </Route>
 
             <Route path="/login" element={<Login setLoginStatus={setLoginStatus}/>} />

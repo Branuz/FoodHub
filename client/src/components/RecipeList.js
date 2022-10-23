@@ -11,6 +11,13 @@ function RecipeList(props) {
         navigate(path);
     }
 
+    const changeToRecipeView = (recipe) => {
+        props.editRecipe(recipe)
+        let path = `/recipes/view`; 
+        navigate(path);
+    }
+
+
     
 
     const editRecipe = (recipe) => {
@@ -35,6 +42,10 @@ function RecipeList(props) {
                         </Card.Text>
                         
                         <div className="d-grid gap-2 mt-4">
+                        <button className = 'btn btn-primary'
+                            onClick={() => changeToRecipeView(recipe)}
+                        >View</button>
+
                         <button className = 'btn btn-primary'
                             onClick={() => editRecipe(recipe)}
                         >Update</button>
