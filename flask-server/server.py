@@ -65,14 +65,27 @@ def add_recipe():
     sql = "INSERT INTO recipes (title, description, type, cooking_time, instructions, date) VALUES (:title, :description, :type, :cooking_time, :instructions, :date);"
     data = {"title":title, "description":description, "type" : type, "cooking_time" : cooking_time, "instructions" : instructions, "date" : date}
     db.session.execute(sql, data)
+    db.session.commit()
     
+    sql = "SELECT id FROM recipes WHERE title=:title;"
+    id_query = db.session.execute(sql, {"title":title})
+    recipe_id = id_query.fetchone()[0]
+
+
     for item in ingredients:
-        ingredient = item["ingredient"]
+        ingredient_name = item["ingredient"]
         amount = item["amount"]
         measurement_type = item["measurement"]
-        
-        sql = "INSERT INTO ingredients (name, amount, measurement_type, recipe_name) VALUES (:ingredient, :amount, :measurement_type);"
-        data = {"ingredient":ingredient, "amount":amount, "measurement_type":measurement_type}
+
+        sql = "INSERT INTO ingredient (ingredient_name) VALUES (:ingredient_name) ON CONFLICT DO NOTHING;"
+        db.session.execute(sql, {"ingredient_name":ingredient_name})
+
+        sql = "SELECT id FROM ingredient WHERE ingredient_name=:ingredient_name;"
+        id_query = db.session.execute(sql, {"ingredient_name":ingredient_name})
+        ingredient_id = id_query.fetchone()[0]
+
+        sql = "INSERT INTO ingredients (recipe_id , ingredient_id, amount, measurement_type) VALUES (:recipe_id, :ingredient_id, :amount, :measurement_type);"
+        data = {"recipe_id":recipe_id, "ingredient_id":ingredient_id, "amount":amount, "measurement_type":measurement_type}
         db.session.execute(sql, data)
 
     db.session.commit()
@@ -92,10 +105,17 @@ def get_recipe():
     return json.dumps(data, indent=4, sort_keys=True, default=str)
 
 
-#Get recipe based on id
+#Get recipe ingredients based on id
 @app.route("/get/<id>/", methods=["GET"])
 def recipe_details(id):
-    return ""
+    data = []
+    sql = "SELECT * FROM ingredients WHERE recipe_id = :id ;"
+    results = db.session.execute(sql, {"id":id}).fetchall()
+    
+    for row in results:
+        data.append(list(row))
+
+    return json.dumps(data, indent=4, sort_keys=True, default=str)
 
 #Get recipe based on id
 @app.route("/update/<id>/", methods=["PUT"])
@@ -107,17 +127,19 @@ def update_recipe(id):
     instructions = request.json ["instructions"]
     date = datetime.now()
 
-   #Will remove comment after done changing from OMR.
     sql = "UPDATE recipes SET title=:title, description=:description, type=:type, cooking_time=:cooking_time, instructions=:instructions, date=:date WHERE id=:id;"
     data = {"title":title, "description":description, "type" : type, "cooking_time" : cooking_time, "instructions" : instructions, "date" : date, "id" : id}
     db.session.execute(sql, data)
-    db.session.commit()
 
+    db.session.commit()
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
 
 #Deletes article based on id
 @app.route("/delete/<id>/", methods=["DELETE"])
 def recipe_delete(id):
+    sql = "DELETE FROM ingredients WHERE recipe_id = :id;"
+    db.session.execute(sql, {"id":id})
+
     sql = "DELETE FROM recipes WHERE id = :id;"
     db.session.execute(sql, {"id":id})
     db.session.commit()

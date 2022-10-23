@@ -16,11 +16,15 @@ CREATE TABLE recipes (
     date TIMESTAMP
 );
 
-CREATE TABLE ingredients (
+CREATE TABLE ingredient (
     id SERIAL PRIMARY KEY,
-    name TEXT,
+    ingredient_name TEXT UNIQUE
+);
+
+CREATE TABLE ingredients (
+    recipe_id INTEGER REFERENCES recipes ON DELETE CASCADE,
+    ingredient_id INTEGER REFERENCES ingredient ON DELETE CASCADE,
     amount FLOAT,
-    measurement_type TEXT,
-    title TEXT REFERENCES recipes
+    measurement_type TEXT
 );
 

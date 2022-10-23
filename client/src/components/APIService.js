@@ -71,5 +71,21 @@ export default class APIService {
           
           return await response
     }
+
+    static async getRecipeIngredients(id) {
+        const response = await fetch(`/get/${id}`, {
+            "method":"GET",
+            headers: {
+              "Content-Type":"application/json"
+            }
+          })
+          .then(response => {
+            if(response.status === 200) {
+              return response.json()
+            }
+          })
+          
+          return await response
+    }
 }
 

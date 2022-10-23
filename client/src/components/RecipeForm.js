@@ -17,6 +17,7 @@ function RecipeForm(props) {
 
 
     useEffect(() => {
+        fetchIngredients()
         setTitle(props.recipe[1])
         setDescription(props.recipe[2])
         props.recipe[3] ? setType(props.recipe[3]) : setType("Breakfest")
@@ -24,11 +25,27 @@ function RecipeForm(props) {
         setInstructions(props.recipe[5])
     },[props.recipe])
 
+    const fetchIngredients = () =>  {
+        if(props.recipe[0]) {
+            APIService.getRecipeIngredients(props.recipe[0])
+            .then(response => {
+                const list = []
+
+                response.map((singleService, index) => {
+                    list.push([{ ingredient: "", amount: "", measurement: ""}])
+                    list[index]["ingredient"] = singleService[1];
+                    list[index]["amount"] = singleService[2];
+                    list[index]["measurement"] = singleService[3];
+                })
+                setIngredientList(list)
+            })
+        }
+    }
+ 
     const updateRecipe = () => {
-        APIService.UpdateRecipe(props.recipe[0], {title, description, type, cookingTime, instructions })
+        APIService.UpdateRecipe(props.recipe[0], {title, description, type, cookingTime, instructions, ingredientList })
         .then(response => props.insertedRecipe(response))
         .catch(error => console.log(error));
-
         routeChange();
     }
 
@@ -66,7 +83,6 @@ function RecipeForm(props) {
         setIngredientList([...ingredientList, { ingredient: "", amount: "", measurement: "" }]);
       };
 
-
   return (
     <div>
         {(
@@ -99,14 +115,13 @@ function RecipeForm(props) {
 
                         <Form.Group as={Col}>
                         <Form.Label>Cooking time</Form.Label>
-                        <Form.Control value = {cookingTime}  onChange={(e) => setCookingTime(e.target.value)} placeholder="Enter estimated cooking time "/>
+                        <Form.Control value = {cookingTime}  onChange={(e) => setCookingTime(e.target.value)} placeholder="Enter estimated cooking time in minutes"/>
                         </Form.Group>
                     </Row>
 
                     <div className="form-field">
                     <label htmlFor="ingredient">Ingredient(s)</label>
                     {ingredientList.map((singleService, index) => (
-                        
                     <div key={index} className="ingredients">
                         <div className="first-division" style={{borderBottom: "1px solid gray", marginBottom:"20px"}}>
                         <Row className="mb-3">
