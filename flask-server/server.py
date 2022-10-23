@@ -51,6 +51,21 @@ def verify_user():
 
     return json.dumps({'success':True}), 200, {'ContentType':'application/json', "token":token[0]} 
 
+#Verify that the user has editing rights
+@app.route("/recipe/verify", methods=["POST"])
+def verify_recipe_creator():
+    title = request.json ["title"]
+    user_token = request.json ["token"]
+    
+    sql = "SELECT user_token From recipes WHERE title=(:title);"
+    result = db.session.execute(sql, {"title":title})
+    token = result.fetchone()
+
+    if user_token != token[0]:
+        return json.dumps({'success':False}), 403, {'ContentType':'application/json'} 
+
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+
 #Create recipe Route
 @app.route("/add", methods=["POST"])
 def add_recipe():

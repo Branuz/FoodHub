@@ -56,6 +56,18 @@ export default class APIService {
           return await response
     }
 
+    static async VerifyRecipeCreator(body) {
+        const response = await fetch("/recipe/verify", {
+             "method": "POST",
+             headers: {
+                 "Content-Type": "application/json"
+             },
+             body: JSON.stringify(body),
+           })
+           
+           return await response
+     }
+
     static async getAllRecipes() {
         const response = await fetch("/get", {
             "method":"GET",

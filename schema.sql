@@ -13,7 +13,8 @@ CREATE TABLE recipes (
     type TEXT,
     cooking_time INTEGER,
     instructions TEXT,
-    date TIMESTAMP
+    date TIMESTAMP,
+    user_token TEXT
 );
 
 CREATE TABLE ingredient (

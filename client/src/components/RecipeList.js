@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import APIService from './APIService'
 import Card from 'react-bootstrap/Card';
 import { useNavigate } from "react-router-dom";
@@ -17,9 +17,6 @@ function RecipeList(props) {
         navigate(path);
     }
 
-
-    
-
     const editRecipe = (recipe) => {
         props.editRecipe(recipe)
         routeChange();
@@ -30,7 +27,23 @@ function RecipeList(props) {
         .then(() => props.deleteRecipe(recipe))
     }
 
+    const [verification, setVerification] = useState(null)
+
+    const verifyRecipeCreator= (recipe) => {
+        const token = localStorage.getItem("token")
+        const title = recipe[1]
+        APIService.VerifyRecipeCreator({token, title})
+        .then(response => {
+            if (response.status === 200) {
+                setVerification(false)
+            } else {
+                setVerification(true)
+            }
+        })
+    }
+
     const renderRecipe = (recipe) => {
+        verifyRecipeCreator(recipe)
         return (
             <div className="recipe-card" key = {recipe.id} >
                 <Card style={{ width: '18rem' }} className="box">
@@ -40,20 +53,23 @@ function RecipeList(props) {
                         <Card.Text>
                             {recipe[2]}
                         </Card.Text>
-                        
+                        {verification ? 
                         <div className="d-grid gap-2 mt-4">
                         <button className = 'btn btn-primary'
                             onClick={() => changeToRecipeView(recipe)}
                         >View</button>
-
-                        <button className = 'btn btn-primary'
-                            onClick={() => editRecipe(recipe)}
-                        >Update</button>
-
-                        <button className = 'btn btn-danger'
-                            onClick = {() => deleteRecipe(recipe)}
-                        >Delete</button>
                         </div>
+                        :
+                        <div className="d-grid gap-2 mt-4">
+                            <button className = 'btn btn-primary'
+                                onClick={() => editRecipe(recipe)}
+                            >Update</button>
+
+                            <button className = 'btn btn-danger'
+                                 onClick = {() => deleteRecipe(recipe)}
+                            >Delete</button>
+                        </div>
+                        }
                     </Card.Body>
                 </Card>
             </div>
