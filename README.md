@@ -10,13 +10,10 @@ Currently setting up the recipe modification functions and routes. Once the fron
 - :heavy_check_mark: Can sign in and logout
 - :heavy_check_mark: Warning is given if the username or password does not match
 - :heavy_check_mark: After login users token is saved in local storage untill logout
-
-<h3>Currenly not working</h3>
-
-- In the new recipe form for now only the "Title and Instructions" are fetched from the db and shown in the update screen. Rest of the forms information will be fixed to be fetched in nearby days.
-- New ingredients can be added but they are not yet saved in storage.
-- New db calls are done via sql commands but have not yet removed the old ORM technique.
-- User specific editing and deleting to be added. Now everyone can delete and update recipes.
+- :heavy_check_mark:User specific editing and deleting.
+- :heavy_check_mark:Cant create recipes unless logged in.
+- :heavy_check_mark:Can only edit recipes that the user has made.
+- :heavy_check_mark:Can view other peoples recipes.
 
 <h2>Purpose of the application</h2>
 The purpose of this application is to work as a easy to use recipe storing website where registered users can post/edit different food or drink recipes.
