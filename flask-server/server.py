@@ -75,10 +75,11 @@ def add_recipe():
     cooking_time = request.json ["cookingTime"]
     instructions = request.json ["instructions"]
     ingredients = request.json["ingredientList"]
+    token = request.json["token"]
     date = datetime.now()
 
-    sql = "INSERT INTO recipes (title, description, type, cooking_time, instructions, date) VALUES (:title, :description, :type, :cooking_time, :instructions, :date);"
-    data = {"title":title, "description":description, "type" : type, "cooking_time" : cooking_time, "instructions" : instructions, "date" : date}
+    sql = "INSERT INTO recipes (title, description, type, cooking_time, instructions, date, user_token) VALUES (:title, :description, :type, :cooking_time, :instructions, :date, :user_token);"
+    data = {"title":title, "description":description, "type" : type, "cooking_time" : cooking_time, "instructions" : instructions, "date" : date, "user_token":token}
     db.session.execute(sql, data)
     db.session.commit()
     

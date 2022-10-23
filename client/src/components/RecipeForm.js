@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col';
 
 
 function RecipeForm(props) {
+    const [token, setToken] = useState(null)
     const [title, setTitle] = useState(null)
     const [type, setType] = useState(null)
     const [description, setDescription] = useState(null)
@@ -17,6 +18,7 @@ function RecipeForm(props) {
 
 
     useEffect(() => {
+        setToken(localStorage.getItem("token"))
         fetchIngredients()
         setTitle(props.recipe[1])
         setDescription(props.recipe[2])
@@ -59,7 +61,7 @@ function RecipeForm(props) {
         if (title==null || description==null || type==null | cookingTime==null | instructions==null ) {
             setError("You need to fill all the fields!")
         } else {
-            APIService.InsertRecipe({title, description, type, cookingTime, instructions, ingredientList })
+            APIService.InsertRecipe({title, description, type, cookingTime, instructions, ingredientList, token })
             .then(response => props.insertedRecipe(response))
     
             routeChange();
