@@ -1,8 +1,5 @@
 <h1>Recipe stash</h1>
 https://recipe-stash-2022.herokuapp.com/
-<h2>Current state</h2>
-Building up main components of the website and still under "testing" phase while finding out how everything works.
-Currently setting up the recipe modification functions and routes. Once the frontend and routing is done ill begin to add users, access permits etc..
 <h3>Currently working</h3>
 
 - :heavy_check_mark:Can create, update and delete recipes.
