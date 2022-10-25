@@ -9,7 +9,7 @@ https://recipe-stash-2022.herokuapp.com/
 - :heavy_check_mark: After login users token is saved in local storage untill logout
 - :heavy_check_mark:User specific editing and deleting.
 - :heavy_check_mark:Cant create recipes unless logged in.
-- :heavy_check_mark:Can only edit recipes that the user has made.
+- :heavy_check_mark:Can only edit recipes that the user has made. (Is not blocked via SQL queries but just UI asked Antti if i can make the required changes even tho time limits done)
 - :heavy_check_mark:Can view other peoples recipes.
 
 <h2>Purpose of the application</h2>
