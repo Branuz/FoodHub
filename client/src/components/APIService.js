@@ -21,11 +21,13 @@ export default class APIService {
         return await response.json()
     }
 
-    static DeleteRecipe(id) {
+    static DeleteRecipe(id, body) {
+        console.log(body)
         return fetch(`/delete/${id}`, {
             "method" : "DELETE",
             headers: {
-                "Content-Type":"application/json"
+                "Content-Type":"application/json",
+                "token":body
             },
         })
     }

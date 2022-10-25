@@ -124,7 +124,7 @@ def get_recipe():
 @app.route("/get/<id>/", methods=["GET"])
 def recipe_details(id):
     data = []
-    sql = "SELECT * FROM ingredients WHERE recipe_id = :id ;"
+    sql = "select amount, measurement_type, ingredient_name, recipe_id from ingredients LEFT JOIN ingredient ON ingredients.ingredient_id = ingredient.id WHERE recipe_id=:id;"
     results = db.session.execute(sql, {"id":id}).fetchall()
     
     for row in results:
@@ -136,14 +136,17 @@ def recipe_details(id):
 @app.route("/update/<id>/", methods=["PUT"])
 def update_recipe(id):
     title = request.json ["title"]
+    token = request.json ["token"]
     description = request.json ["description"]
     type = request.json ["type"]
     cooking_time = request.json ["cookingTime"]
     instructions = request.json ["instructions"]
+    ingredients = request.json["ingredientList"]
     date = datetime.now()
+    
 
-    sql = "UPDATE recipes SET title=:title, description=:description, type=:type, cooking_time=:cooking_time, instructions=:instructions, date=:date WHERE id=:id;"
-    data = {"title":title, "description":description, "type" : type, "cooking_time" : cooking_time, "instructions" : instructions, "date" : date, "id" : id}
+    sql = "UPDATE recipes SET title=:title, description=:description, type=:type, cooking_time=:cooking_time, instructions=:instructions, date=:date WHERE id=:id AND user_token=:token;"
+    data = {"title":title, "description":description, "type" : type, "cooking_time" : cooking_time, "instructions" : instructions, "date" : date, "id" : id, "token":token}
     db.session.execute(sql, data)
 
     db.session.commit()
@@ -152,11 +155,12 @@ def update_recipe(id):
 #Deletes article based on id
 @app.route("/delete/<id>/", methods=["DELETE"])
 def recipe_delete(id):
+    token = request.headers ["token"]
     sql = "DELETE FROM ingredients WHERE recipe_id = :id;"
     db.session.execute(sql, {"id":id})
 
-    sql = "DELETE FROM recipes WHERE id = :id;"
-    db.session.execute(sql, {"id":id})
+    sql = "DELETE FROM recipes WHERE id = :id  AND user_token = :token;"
+    db.session.execute(sql, {"id":id, "token":token})
     db.session.commit()
 
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 

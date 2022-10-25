@@ -35,9 +35,9 @@ function RecipeForm(props) {
 
                 response.map((singleService, index) => {
                     list.push([{ ingredient: "", amount: "", measurement: ""}])
-                    list[index]["ingredient"] = singleService[1];
-                    list[index]["amount"] = singleService[2];
-                    list[index]["measurement"] = singleService[3];
+                    list[index]["ingredient"] = singleService[2];
+                    list[index]["amount"] = singleService[0];
+                    list[index]["measurement"] = singleService[1];
                 })
                 setIngredientList(list)
             })
@@ -45,7 +45,7 @@ function RecipeForm(props) {
     }
  
     const updateRecipe = () => {
-        APIService.UpdateRecipe(props.recipe[0], {title, description, type, cookingTime, instructions, ingredientList })
+        APIService.UpdateRecipe(props.recipe[0], {title, description, type, cookingTime, instructions, ingredientList, token })
         .then(response => props.insertedRecipe(response))
         .catch(error => console.log(error));
         routeChange();
