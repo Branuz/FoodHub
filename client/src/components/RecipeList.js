@@ -14,7 +14,6 @@ function RecipeList(props) {
     }
 
     const changeToRecipeView = (recipe) => {
-        console.log(verification)
         props.editRecipe(recipe)
         let path = `/recipes/view`; 
         navigate(path);
